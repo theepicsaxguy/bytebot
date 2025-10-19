@@ -32,6 +32,9 @@ export class ProxyService implements BytebotAgentService {
 
   constructor(private readonly configService: ConfigService) {
     const proxyUrl = this.configService.get<string>('BYTEBOT_LLM_PROXY_URL');
+    const proxyApiKey = this.configService.get<string>(
+      'BYTEBOT_LLM_PROXY_API_KEY',
+    );
 
     if (!proxyUrl) {
       this.logger.warn(
@@ -41,7 +44,7 @@ export class ProxyService implements BytebotAgentService {
 
     // Initialize OpenAI client with proxy configuration
     this.openai = new OpenAI({
-      apiKey: 'dummy-key-for-proxy',
+      apiKey: proxyApiKey ?? 'dummy-key-for-proxy',
       baseURL: proxyUrl,
     });
   }
